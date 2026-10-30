@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7eee8"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><title>Research Desk · 本地研究工作台</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/"><span class="brand-mark">R</span><span>research<span class="brand-light">desk</span><small>LOCAL RESEARCH STUDIO</small></span></a>
+      <button class="new-research" id="newResearch"><span>＋</span> 开始新调研</button>
+      <div class="side-label">工作区</div>
+      <button class="nav-item active"><span class="nav-icon">⌕</span>研究台</button>
+      <div class="side-label history-label">最近调研</div>
+      <div id="sessionList" class="session-list"><div class="side-empty">这里会保存你的研究记录</div></div>
+      <div class="sidebar-foot"><div class="local-badge"><span class="status-dot"></span><span>本地优先模式</span></div><div class="sidebar-foot-note">搜索公开来源 · 模型在本机运行</div></div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar"><div class="breadcrumb">工作区 <span>/</span> <b>研究台</b></div><div class="top-status"><span class="status-dot" id="overallDot"></span><span id="overallStatus">正在检查本机服务…</span><button class="icon-button" id="refreshStatus" title="刷新连接状态">↻</button></div></header>
+      <section class="workspace">
+        <div class="intro-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> EVIDENCE FIRST, ALWAYS</div><h1>把复杂问题，<em>研究清楚。</em></h1><p class="intro-copy">从多个公开来源交叉验证，保留每一条证据的出处。报告由本机模型整理，研究过程留在本地。</p></div><div class="intro-stamp"><span>RD</span><small>RESEARCH<br>DESK</small></div></div>
+
+        <div class="service-strip" id="serviceStrip"><div class="service-chip" id="ollamaChip"><i></i><span>本机模型</span><b>检查中</b></div><div class="service-chip" id="searxChip"><i></i><span>网页搜索</span><b>检查中</b></div><div class="service-chip" id="youtubeChip"><i></i><span>YouTube API</span><b>检查中</b></div><span class="service-note">按设置选择搜索通道；报告由本机模型整理。 <button type="button" class="text-button" id="openSearchSettings">搜索设置</button></span></div>
+
+        <section class="research-card" id="composer">
+          <div class="card-heading"><div><div class="section-kicker">01 <span>DEFINE THE QUESTION</span></div><h2>你想弄清楚什么？</h2></div><span class="private-tag"><span>⌂</span> 本地保存</span></div>
+          <form id="researchForm">
+            <label class="sr-only" for="question">调研问题</label><textarea id="question" maxlength="1000" placeholder="例如：本地多智能体协作工具的成熟架构是什么？哪些开源项目已经验证了这些做法？" required></textarea>
+            <div class="form-meta"><span>把问题写成可以通过来源验证的具体问题</span><span id="questionCount">0 / 1000</span></div>
+            <div class="source-heading"><div><div class="section-kicker">02 <span>CHOOSE YOUR SOURCES</span></div><h3>选择研究范围</h3></div><button type="button" class="text-button" id="selectAll">选择全部</button></div>
+            <div class="source-grid">
+              <label class="source-option"><input type="checkbox" name="platform" value="xiaohongshu"><span class="source-symbol red">小</span><span class="source-copy"><b>小红书</b><small>公开网页索引</small></span><span class="checkmark"></span></label>
+              <label class="source-option"><input type="checkbox" name="platform" value="youtube" checked><span class="source-symbol coral">▶</span><span class="source-copy"><b>YouTube</b><small>官方 API / 网页索引</small></span><span class="checkmark"></span></label>
+              <label class="source-option"><input type="checkbox" name="platform" value="zhihu"><span class="source-symbol blue">知</span><span class="source-copy"><b>知乎</b><small>公开网页索引</small></span><span class="checkmark"></span></label>
+              <label class="source-option"><input type="checkbox" name="platform" value="douyin"><span class="source-symbol ink">抖</span><span class="source-copy"><b>抖音</b><small>公开网页索引</small></span><span class="checkmark"></span></label>
+              <label class="source-option"><input type="checkbox" name="platform" value="github" checked><span class="source-symbol dark">⌘</span><span class="source-copy"><b>GitHub / 开源</b><small>官方公开 API</small></span><span class="checkmark"></span></label>
+              <label class="source-option"><input type="checkbox" name="platform" value="academic" checked><span class="source-symbol gold">文</span><span class="source-copy"><b>学术论文</b><small>arXiv · Crossref</small></span><span class="checkmark"></span></label>
+              <label class="source-option"><input type="checkbox" name="platform" value="x"><span class="source-symbol ink">𝕏</span><span class="source-copy"><b>X / Twitter</b><small>公开网页索引</small></span><span class="checkmark"></span></label>
+              <label class="source-option"><input type="checkbox" name="platform" value="web"><span class="source-symbol peach">◎</span><span class="source-copy"><b>全网网页</b><small>多个可选搜索通道</small></span><span class="checkmark"></span></label>
+            </div>
+            <div class="scope-note"><span class="note-icon">i</span><p>社交平台仅检索公开网页索引，不访问登录内容、推荐流或私有数据。YouTube 可直接读取公开搜索页；其他平台通过公开搜索索引检索。默认已接入免密钥的 Truegle 免费搜索；也可配置本机 SearXNG、Brave 或 Tavily，通道受限时自动切换，并记录每次查询状态。</p></div>
+            <div class="form-bottom"><div class="query-controls"><label class="result-limit">时间范围 <select id="timeRange"><option value="7d">近 7 天</option><option value="30d" selected>近 30 天</option><option value="90d">近 90 天</option><option value="all">不限时间</option></select></label><label class="result-limit">每个来源 <select id="maxPerSource"><option value="5">5 条</option><option value="8" selected>8 条</option><option value="12">12 条</option></select></label></div><button class="primary-button" type="submit" id="runButton"><span>开始调研</span><span class="button-arrow">↗</span></button></div>
+          </form>
+        </section>
+
+        <section id="results" class="results-section hidden">
+          <div class="result-top"><div><div class="section-kicker">RESEARCH SESSION <span id="resultSessionId"></span> <span id="resultCreatedAt"></span></div><h2 id="resultQuestion"></h2></div><button id="newFromResults" class="secondary-button">＋ 新调研</button></div>
+          <div class="angle-strip" id="angleStrip"></div>
+          <div class="progress-line" id="progressLine"><span></span></div>
+          <div class="result-layout">
+            <div class="result-main"><div class="report-panel"><div class="panel-heading"><div><div class="section-kicker">SYNTHESIS</div><h3>研究简报</h3></div><span class="generated-label"><i></i> 本机生成 · <span id="rangeLabel">近 30 天</span></span></div><div id="report" class="report-body"><div class="report-wait"><span class="spinner"></span> 正在检索公开证据…</div></div></div>
+              <div class="evidence-panel"><div class="panel-heading"><div><div class="section-kicker">SOURCE TRAIL</div><h3>证据来源 <span id="sourceCount" class="count-pill">0</span></h3></div><button class="text-button" id="showImport">＋ 添加来源</button></div><div id="resultAudit" class="result-audit"></div><div id="evidenceList" class="evidence-list"></div><div id="emptyEvidence" class="empty-evidence hidden">没有找到可用的公开来源。你可以配置 SearXNG，或添加自己已核验的链接与摘录。</div></div>
+            </div>
+            <aside class="result-aside"><div class="aside-card"><div class="section-kicker">SOURCE COVERAGE</div><h3>来源覆盖</h3><div id="coverageList" class="coverage-list"></div><details><summary>查看搜索通道记录</summary><div id="searchAttempts"></div></details><p class="coverage-footnote">“已检索”代表搜索端点返回了公开索引结果，不代表平台内容完整。</p></div><div class="aside-card method-card"><div class="section-kicker">RESEARCH METHOD</div><h3>研究方法</h3><ol><li><span>1</span>按问题拆出多个检索角度</li><li><span>2</span>优先使用官方 API 和学术索引</li><li><span>3</span>保留 URL 与原始证据摘录</li><li><span>4</span>结论逐条引用来源编号</li></ol><a href="https://github.com/stanford-oval/storm" target="_blank" rel="noreferrer">参考 STORM 的证据驱动研究 ↗</a></div></aside>
+          </div>
+        </section>
+        <footer class="page-foot"><span>RESEARCH DESK <i>·</i> PRIVATE BY DEFAULT</span><span>基于可追溯来源，不替代原始材料核验</span></footer>
+      </section>
+    </main>
+  </div>
+  <dialog id="importDialog"><form id="importForm" method="dialog"><div class="dialog-head"><div><div class="section-kicker">ADD VERIFIED MATERIAL</div><h3>补充一条来源</h3></div><button class="icon-button" type="button" id="closeImport">×</button></div><label>来源标题<input id="importTitle" required maxlength="300" placeholder="文章、视频或论文标题"></label><label>原始链接<input id="importUrl" required type="url" placeholder="https://…"></label><label>证据摘录<textarea id="importSnippet" maxlength="6000" placeholder="粘贴你希望纳入分析的公开内容或摘要"></textarea></label><label>平台<input id="importPlatform" maxlength="60" placeholder="例如：知乎 / 小红书 / 访谈"></label><div class="dialog-actions"><button type="button" class="secondary-button" id="cancelImport">取消</button><button class="primary-button" type="submit">保存来源 <span class="button-arrow">↗</span></button></div></form></dialog>
+  <dialog id="searchSettingsDialog"><form id="searchSettingsForm"><div class="dialog-head"><div><div class="section-kicker">SEARCH CONNECTIONS</div><h3>搜索设置</h3></div><button type="button" class="icon-button" id="closeSearchSettings">×</button></div>
+    <p>保存后立即用于下一轮调研。密钥在这台 Windows 电脑上加密保存，设置接口不会返回密钥。空白表示保留原值。</p>
+    <label>本机 SearXNG 地址<input id="settingSearx" placeholder="http://127.0.0.1:8080"></label>
+    <label>Brave Search API Key <small id="braveConfigured"></small><input id="settingBrave" type="password" autocomplete="new-password" placeholder="输入新密钥"></label><label><input id="clearBrave" type="checkbox"> 删除本机保存的 Brave 密钥</label>
+    <label>Tavily API Key <small id="tavilyConfigured"></small><input id="settingTavily" type="password" autocomplete="new-password" placeholder="输入新密钥"></label><label><input id="clearTavily" type="checkbox"> 删除本机保存的 Tavily 密钥</label>
+    <label>YouTube Data API Key <small id="youtubeConfigured"></small><input id="settingYouTube" type="password" autocomplete="new-password" placeholder="可选；未配置时读取公开搜索页"></label><label><input id="clearYouTube" type="checkbox"> 删除本机保存的 YouTube 密钥</label>
+    <p>默认已接入 Truegle 和 Purili 免费搜索，无需注册或密钥。Truegle 无结果或候选相关性不足时自动查询 Purili。也可使用 SearXNG、Brave 或 Tavily；这些服务为可选配置，可能消耗服务额度。YouTube 优先官方 API，再读取公开页面。未通过筛选的候选可展开查看，不用于报告。</p>
+    <p><a href="https://api-dashboard.search.brave.com" target="_blank" rel="noreferrer">Brave 设置 ↗</a> · <a href="https://app.tavily.com" target="_blank" rel="noreferrer">Tavily 设置 ↗</a></p>
+    <p id="settingsFeedback" role="status"></p><div class="dialog-actions"><button type="button" class="secondary-button" id="cancelSearchSettings">取消</button><button type="submit" class="primary-button">保存搜索设置</button></div></form></dialog>
+  <script src="/app.js"></script>
+</body>
+</html>
+
