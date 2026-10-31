@@ -1,1 +1,1 @@
-ResearchDesk | 2026-10-09 | Truegle + Purili free search | Expanded candidate pool | Filtered candidates visible | Windows x64
+﻿ResearchDesk | 1.1.0 | 2026-10-31 | Truegle + Purili free search | Windows x64 | Startup: Start.cmd
