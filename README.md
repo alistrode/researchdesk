@@ -80,3 +80,11 @@ $env:YOUTUBE_DATA_API_KEY = '你的 YouTube Data API v3 Key' # 可选
 - 扩大候选池、备用 API、候选保留及原有密钥保密回归检查均通过。小红书本次 Qwen3 TTS 查询仍无足够相关公开证据。
 - 后续完善版保存于 E:\xiangmujihua\.tmp\ResearchDesk-search-complete。已在用户再次明确要求更新后完成桌面安装，DLL 与已测试发布版本一致，免费备用 API 和候选查看已验证生效。
 
+
+## v1.3.1 一键配置修复（2026-11-03）
+
+- 一键配置自动下载 Ollama 官方 Windows 便携运行包、解压到当前用户目录、启动服务并安装默认模型，无需安装器或管理员弹窗。已有 Ollama 和模型继续复用。
+- 安全下载使用系统 curl，包含连接超时、无进展超时和重试；Windows 容忍证书吊销服务离线，仍校验证书链和域名，实际吊销证书仍拒绝。下载来自 Ollama 官方 GitHub 与官方模型 registry。
+- 已知大小显示真实字节进度；未知大小显示活动状态与已下载量。进度流中断、刷新页面或关闭后重开，仍定时读取后台状态；错误保留并显示“重试”。
+- 官方模型拉取失败时下载完整 registry manifest 及所有组件，保留视觉投影、模板和参数；使用当前用户的默认 Ollama 模型目录或 `OLLAMA_MODELS`。
+- 分发包自带 .NET；首次配置仍需联网下载 Ollama 与模型，并需要系统 curl（Windows 10/11 自带）。

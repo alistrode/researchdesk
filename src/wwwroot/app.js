@@ -160,6 +160,8 @@ byId('searchSettingsForm').addEventListener('submit',async e=>{
     '#msetup button:disabled{opacity:.55;cursor:default}',
     '#msetup .ms-bar{height:8px;border-radius:6px;background:rgba(255,255,255,.18);overflow:hidden}',
     '#msetup .ms-bar > i{display:block;height:100%;width:0;background:#4dd0aa;transition:width .25s}',
+    '#msetup .ms-bar.busy > i{width:35%!important;animation:ms-pulse 1.2s ease-in-out infinite alternate}',
+    '@keyframes ms-pulse{from{transform:translateX(-100%)}to{transform:translateX(280%)}}',
     '#msetup .ms-text{font-size:12px;opacity:.82;margin-top:6px;word-break:break-all}',
     '#msetup .ms-err{color:#ffb4a8}'
   ].join('');
@@ -192,6 +194,7 @@ byId('searchSettingsForm').addEventListener('submit',async e=>{
     function mb(v) { return (v / 1048576).toFixed(0); }
 
     function render(s) {
+      bar.parentElement.classList.toggle('busy', !!s.running && !s.total);
       if (s.ready) {
         stateEl.textContent = '● 已就绪（' + s.model + '）';
         btn.hidden = true;
@@ -202,6 +205,7 @@ byId('searchSettingsForm').addEventListener('submit',async e=>{
       btn.hidden = false;
 
       if (s.running) {
+        stateEl.textContent = '● 配置中';
         btn.disabled = true;
         btn.textContent = '配置中…';
         prog.hidden = false;
@@ -209,13 +213,15 @@ byId('searchSettingsForm').addEventListener('submit',async e=>{
         bar.style.width = (p === null ? 100 : p) + '%';
         bar.style.opacity = (p === null ? 0.35 : 1);
         var label = s.status || '处理中';
+        if (p === null && s.completed > 0) label += '　已下载 ' + mb(s.completed) + ' MB';
         if (p !== null) label += '　' + p + '%　' + mb(s.completed) + ' / ' + mb(s.total) + ' MB';
         text.textContent = label;
         text.className = 'ms-text';
         return;
       }
 
-      if (s.phase === 'error') {
+      if (s.phase === 'error' || s.error) {
+        stateEl.textContent = '● 配置失败';
         btn.disabled = false;
         btn.textContent = '重试';
         prog.hidden = false;
@@ -244,7 +250,7 @@ byId('searchSettingsForm').addEventListener('submit',async e=>{
         try {
           var s = JSON.parse(ev.data);
           render(s);
-          if (!s.running) { es.close(); es = null; }
+          if (!s.running && es) { es.close(); es = null; }
         } catch (e) { }
       };
       es.onerror = function () { if (es) { es.close(); es = null; } };
@@ -260,7 +266,7 @@ byId('searchSettingsForm').addEventListener('submit',async e=>{
       text.className = 'ms-text';
       stateEl.textContent = '● 配置中';
       fetch('/api/setup/ensure-model', { method: 'POST' })
-        .then(function () { listen(); })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); poll(); listen(); })
         .catch(function (e) {
           btn.disabled = false;
           btn.textContent = '重试';
@@ -270,7 +276,7 @@ byId('searchSettingsForm').addEventListener('submit',async e=>{
     });
 
     poll();
-    setInterval(function () { if (!es && !btn.disabled) poll(); }, 5000);
+    setInterval(poll, 3000);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);

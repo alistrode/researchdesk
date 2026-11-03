@@ -1,1 +1,1 @@
-﻿ResearchDesk | 1.3.0 | 2026-10-31 | Truegle + Purili free search | Windows x64 | Startup: Start.cmd | 新增「本地模型」一键配置面板
+ResearchDesk | 1.3.1 | 2026-11-03 | Reliable one-click setup and live progress | Windows x64 | Startup: Start.cmd

@@ -64,3 +64,9 @@ description: 运行、调试与维护 ResearchDesk 本地多平台调研工作�
 - `scripts/` — 启动脚本
 - `README.md` — 产品说明（含各通道细节）
 - Release 附件 `researchdesk-v*-win-x64.zip` — 自包含免安装分发包
+
+## v1.3.1 配置进度与恢复
+
+模型配置实现见 `src/ModelSetup.cs`，面板见 `src/wwwroot/app.js`。`GET /api/setup/state` 始终保留失败状态；`POST /api/setup/ensure-model` 启动后台配置，重复点击运行中任务不重复启动。进度流断开后页面仍每三秒轮询。Ollama 官方便携包由目标主机自行下载，默认模型使用完整官方 manifest。Windows curl 使用 `--ssl-revoke-best-effort` 处理吊销服务离线，禁止关闭证书或域名校验。
+
+构建完整包：`dotnet publish src/ResearchDesk.csproj -c Release -r win-x64 --self-contained true -o publish`；完整分发文件夹保留 `publish`、`assets`、`Start.cmd`、`start.ps1`、`launch.ps1`、README、MODELS 和 VERSION。替换应用前保留旧运行包，用户会话与密钥位于 LOCALAPPDATA，禁止随发行包上传。
